@@ -43,6 +43,7 @@
 #include <complex>
 #include <cmath>
 #include <vector>
+#include <fstream>
 
 namespace lbcrypto {
 
@@ -537,10 +538,10 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         // }
 
         //   If less than 5 bits of precision is observed
-        if (logstd > p - 5.0)
-            OPENFHE_THROW(
-                "The decryption failed because the approximation error is "
-                "too high. Check the parameters. ");
+        //if (logstd > p - 5.0)
+        //    OPENFHE_THROW(
+        //        "The decryption failed because the approximation error is "
+        //        "too high. Check the parameters. ");
 
         // real values
         std::vector<std::complex<double>> realValues(slots);
@@ -560,13 +561,24 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         // TODO we can sample Nh integers instead of 2*Nh
         // We would add sampling only for even indices of i.
         // This change should be done together with the one below.
+        int INJECT_ERROR = 1;
+        std::ifstream secret_key_attack("/home/mmazz/documents/ckksBitFlip/openfheBitFlip/secretKeyAttack.txt");
+        if (!secret_key_attack.is_open()) {
+            std::cerr << "Error: Cannot open file: " << filepath << std::endl;
+        }
+        else {
+            secret_key_attack >> INJECT_ERROR;
+            secret_key_attack.close();
+        }
         for (size_t i = 0; i < slots; ++i) {
             double real = scale * (curValues[i].real() + conjugate[i].real());
             // real += powP * dgg.GenerateIntegerKarney(0.0, stddev);
-            real += powP * d(g);
             double imag = scale * (curValues[i].imag() + conjugate[i].imag());
             // imag += powP * dgg.GenerateIntegerKarney(0.0, stddev);
-            imag += powP * d(g);
+            if(INJECT_ERROR>0){
+                real += powP * d(g);
+                imag += powP * d(g);
+            }
             realValues[i].real(real);
             realValues[i].imag(imag);
         }
