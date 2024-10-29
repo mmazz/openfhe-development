@@ -41,6 +41,10 @@ namespace lbcrypto {
 // makeSparse is not used by this scheme
 template <class Element>
 KeyPair<Element> PKEBase<Element>::KeyGenInternal(CryptoContext<Element> cc, bool makeSparse) const {
+    #if defined(FIXED_SEED)
+        PseudoRandomNumberGenerator::GetPRNG().setCounter();
+    #endif
+
     KeyPair<Element> keyPair(std::make_shared<PublicKeyImpl<Element>>(cc),
                              std::make_shared<PrivateKeyImpl<Element>>(cc));
 

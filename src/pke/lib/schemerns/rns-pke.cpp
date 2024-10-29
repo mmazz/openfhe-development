@@ -37,6 +37,10 @@
 namespace lbcrypto {
 
 Ciphertext<DCRTPoly> PKERNS::Encrypt(DCRTPoly plaintext, const PrivateKey<DCRTPoly> privateKey) const {
+
+    #if defined(FIXED_SEED)
+        PseudoRandomNumberGenerator::GetPRNG().setCounter();
+    #endif
     Ciphertext<DCRTPoly> ciphertext(std::make_shared<CiphertextImpl<DCRTPoly>>(privateKey));
 
     const std::shared_ptr<ParmType> ptxtParams = plaintext.GetParams();
@@ -53,6 +57,10 @@ Ciphertext<DCRTPoly> PKERNS::Encrypt(DCRTPoly plaintext, const PrivateKey<DCRTPo
 }
 
 Ciphertext<DCRTPoly> PKERNS::Encrypt(DCRTPoly plaintext, const PublicKey<DCRTPoly> publicKey) const {
+
+    #if defined(FIXED_SEED)
+        PseudoRandomNumberGenerator::GetPRNG().setCounter();
+    #endif
     Ciphertext<DCRTPoly> ciphertext(std::make_shared<CiphertextImpl<DCRTPoly>>(publicKey));
 
     const std::shared_ptr<ParmType> ptxtParams = plaintext.GetParams();

@@ -41,7 +41,7 @@
 #include "utils/exception.h"
 #include "scheme/scheme-utils.h"
 #include "scheme/scheme-id.h"
-
+#include "math/distributiongenerator.h"
 #include <memory>
 
 namespace lbcrypto {
@@ -53,6 +53,7 @@ class CCParams;
 template <typename ContextGeneratorType, typename Element>
 typename ContextGeneratorType::ContextType genCryptoContextCKKSRNSInternal(
     const CCParams<ContextGeneratorType>& parameters) {
+    PseudoRandomNumberGenerator::SetSeed();
 #if NATIVEINT == 128 && !defined(__EMSCRIPTEN__)
     if (parameters.GetScalingTechnique() == FLEXIBLEAUTO || parameters.GetScalingTechnique() == FLEXIBLEAUTOEXT) {
         OPENFHE_THROW("128-bit CKKS is not supported for the FLEXIBLEAUTO or FLEXIBLEAUTOEXT methods.");

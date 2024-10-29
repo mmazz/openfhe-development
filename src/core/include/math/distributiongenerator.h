@@ -47,8 +47,9 @@
 // #include <mutex>
 #include <random>
 #include <thread>
+#include <fstream>
 
-// #define FIXED_SEED // if defined, then uses a fixed seed number for
+#define FIXED_SEED // if defined, then uses a fixed seed number for
 // reproducible results during debug. Use only one OMP thread to ensure
 // reproducibility
 
@@ -85,6 +86,26 @@ public:
         }
     }
 
+static void SetSeed(){
+
+            std::array<uint32_t, 16> seed{};
+            std::ifstream seedFile("/home/mmazz/documents/openfheBitFlip/seed.txt");
+            uint32_t fix_seed;
+            if(!seedFile)
+            {
+                std::cerr << "No seed file open" << std::endl;
+            }
+
+            if(seedFile >> fix_seed)
+            {
+                seed[0] = fix_seed;
+            }
+            else
+                std::cerr<< "Can't read seed" << std::endl;
+            seedFile.close();
+            m_prng  = std::make_shared<PRNG>(seed);
+}
+
     static PRNG& GetPRNG() {
         // initialization of PRNGs
         if (m_prng == nullptr) {
@@ -92,13 +113,7 @@ public:
             {
 #if defined(FIXED_SEED)
                 // Only used for debugging in the single-threaded mode.
-                std::cerr << "**FOR DEBUGGING ONLY!!!!  Using fixed initializer for "
-                             "PRNG. Use a single thread only, e.g., OMP_NUM_THREADS=1!"
-                          << std::endl;
-
-                std::array<uint32_t, 16> seed{};
-                seed[0] = 1;
-                m_prng  = std::make_shared<PRNG>(seed);
+                SetSeed();
 #else
                 // A 512-bit seed is generated for each thread (this roughly corresponds
                 // to 256 bits of security). The seed is the sum of a random sample

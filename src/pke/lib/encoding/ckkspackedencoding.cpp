@@ -44,6 +44,7 @@
 #include <cmath>
 #include <vector>
 #include <fstream>
+#include <string>
 
 namespace lbcrypto {
 
@@ -562,7 +563,8 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         // We would add sampling only for even indices of i.
         // This change should be done together with the one below.
         int INJECT_ERROR = 1;
-        std::ifstream secret_key_attack("/home/mmazz/documents/ckksBitFlip/openfheBitFlip/secretKeyAttack.txt");
+        std::string filepath = "/home/mmazz/documents/ckksBitFlip/openfheBitFlip/secretKeyAttack.txt";
+        std::ifstream secret_key_attack(filepath);
         if (!secret_key_attack.is_open()) {
             std::cerr << "Error: Cannot open file: " << filepath << std::endl;
         }
@@ -570,18 +572,25 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
             secret_key_attack >> INJECT_ERROR;
             secret_key_attack.close();
         }
+
+        std::string filepath2 = "/home/mmazz/documents/ckksBitFlip/openfheBitFlip/inyectionIsActive.txt";
+        std::ofstream file2(filepath2);
         for (size_t i = 0; i < slots; ++i) {
             double real = scale * (curValues[i].real() + conjugate[i].real());
             // real += powP * dgg.GenerateIntegerKarney(0.0, stddev);
             double imag = scale * (curValues[i].imag() + conjugate[i].imag());
             // imag += powP * dgg.GenerateIntegerKarney(0.0, stddev);
             if(INJECT_ERROR>0){
+                file2 << "Entre";
                 real += powP * d(g);
                 imag += powP * d(g);
             }
+            else
+                file2<< "No Entre";
             realValues[i].real(real);
             realValues[i].imag(imag);
         }
+        file2.close();
 
         // TODO we can half the dimension for the FFT by decoding in
         // Z[X + 1/X]/(X^n + 1). This would change the complexity from n*logn to

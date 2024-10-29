@@ -135,6 +135,12 @@ class Blake2Engine {
     m_bufferIndex = other.m_bufferIndex;
   }
 
+  void setCounter()
+  {
+    m_counter = 0;
+    m_bufferIndex = 0;
+  }
+
  private:
   /**
    * @brief The main call to blake2xb function
