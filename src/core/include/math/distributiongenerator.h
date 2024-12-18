@@ -93,7 +93,6 @@ static void SetSeed(){
             const char* home = std::getenv("HOME");
             if (!home) {
               std::cerr << "No se pudo obtener el directorio de inicio." << std::endl;
-              return 1;
             }
             std::string filePath = std::string(home) + "/ckksBitFlip/openfheBitFlip/seed.txt";
             std::ifstream seedFile(filePath);
@@ -101,7 +100,6 @@ static void SetSeed(){
             if(!seedFile)
             {
                 std::cerr << "No seed file open" << std::endl;
-                return 1;
             }
 
             if(seedFile >> fix_seed)
