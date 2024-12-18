@@ -45,7 +45,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
-
+#include <cstdlib> 
 namespace lbcrypto {
 
 std::vector<std::complex<double>> Conjugate(const std::vector<std::complex<double>>& vec) {
