@@ -570,7 +570,9 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         std::string filepath = std::string(home) + "/ckksBitFlip/openfheBitFlip/secretKeyAttack.txt";
         std::ifstream secret_key_attack(filepath);
         if (!secret_key_attack.is_open()) {
+            std::cerr << std::endl;
             std::cerr << "Error: Cannot open file: " << filepath << std::endl;
+            std::cerr << std::endl;
         }
             
         else {
@@ -582,7 +584,9 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         std::ofstream file2(filepath2);
         
         if (!file2.is_open()) {
+            std::cerr << std::endl;
             std::cerr << "Error: Cannot open file: " << filepath2 << std::endl;
+            std::cerr << std::endl;
         }
         
         for (size_t i = 0; i < slots; ++i) {
