@@ -566,13 +566,11 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         const char* home = std::getenv("HOME");
         if (!home) {
             std::cerr << "No se pudo obtener el directorio de inicio." << std::endl;
-            return 1;
         }
         std::string filePath = std::string(home) + "/ckksBitFlip/openfheBitFlip/secretKeyAttack.txt";
         std::ifstream secret_key_attack(filepath);
         if (!secret_key_attack.is_open()) {
             std::cerr << "Error: Cannot open file: " << filepath << std::endl;
-            return 1;
         }
             
         else {
@@ -585,7 +583,6 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         
         if (!file2.is_open()) {
             std::cerr << "Error: Cannot open file: " << filepath2 << std::endl;
-            return 1;
         }
         
         for (size_t i = 0; i < slots; ++i) {
