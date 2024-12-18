@@ -563,7 +563,7 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         // We would add sampling only for even indices of i.
         // This change should be done together with the one below.
         int INJECT_ERROR = 1;
-        std::string filepath = "/home/mmazz/documents/ckksBitFlip/openfheBitFlip/secretKeyAttack.txt";
+        std::string filepath = "~/ckksBitFlip/openfheBitFlip/secretKeyAttack.txt";
         std::ifstream secret_key_attack(filepath);
         if (!secret_key_attack.is_open()) {
             std::cerr << "Error: Cannot open file: " << filepath << std::endl;
@@ -573,7 +573,7 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
             secret_key_attack.close();
         }
 
-        std::string filepath2 = "/home/mmazz/documents/ckksBitFlip/openfheBitFlip/inyectionIsActive.txt";
+        std::string filepath2 = "~/ckksBitFlip/openfheBitFlip/inyectionIsActive.txt";
         std::ofstream file2(filepath2);
         for (size_t i = 0; i < slots; ++i) {
             double real = scale * (curValues[i].real() + conjugate[i].real());
