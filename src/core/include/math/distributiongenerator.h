@@ -89,7 +89,7 @@ public:
 static void SetSeed(){
 
             std::array<uint32_t, 16> seed{};
-            std::ifstream seedFile("/home/mmazz/documents/openfheBitFlip/seed.txt");
+            std::ifstream seedFile("~/ckksBitFlip/openfheBitFlip/seed.txt");
             uint32_t fix_seed;
             if(!seedFile)
             {
