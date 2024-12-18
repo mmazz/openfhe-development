@@ -99,7 +99,9 @@ static void SetSeed(){
             uint32_t fix_seed;
             if(!seedFile)
             {
-                std::cerr << "No seed file open" << std::endl;
+                std::cerr << std::endl;
+                std::cerr << "No seed file open " << filePath << std::endl;
+                std::cerr << std::endl;
             }
 
             if(seedFile >> fix_seed)
@@ -107,7 +109,11 @@ static void SetSeed(){
                 seed[0] = fix_seed;
             }
             else
+            {
+                std::cerr << std::endl;
                 std::cerr<< "Can't read seed" << std::endl;
+                std::cerr << std::endl;
+            }
             seedFile.close();
             m_prng  = std::make_shared<PRNG>(seed);
 }
