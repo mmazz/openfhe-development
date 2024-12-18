@@ -567,7 +567,7 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         if (!home) {
             std::cerr << "No se pudo obtener el directorio de inicio." << std::endl;
         }
-        std::string filePath = std::string(home) + "/ckksBitFlip/openfheBitFlip/secretKeyAttack.txt";
+        std::string filepath = std::string(home) + "/ckksBitFlip/openfheBitFlip/secretKeyAttack.txt";
         std::ifstream secret_key_attack(filepath);
         if (!secret_key_attack.is_open()) {
             std::cerr << "Error: Cannot open file: " << filepath << std::endl;
