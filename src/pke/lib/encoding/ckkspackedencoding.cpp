@@ -563,18 +563,31 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         // We would add sampling only for even indices of i.
         // This change should be done together with the one below.
         int INJECT_ERROR = 1;
-        std::string filepath = "~/ckksBitFlip/openfheBitFlip/secretKeyAttack.txt";
+        const char* home = std::getenv("HOME");
+        if (!home) {
+            std::cerr << "No se pudo obtener el directorio de inicio." << std::endl;
+            return 1;
+        }
+        std::string filePath = std::string(home) + "/ckksBitFlip/openfheBitFlip/secretKeyAttack.txt";
         std::ifstream secret_key_attack(filepath);
         if (!secret_key_attack.is_open()) {
             std::cerr << "Error: Cannot open file: " << filepath << std::endl;
+            return 1;
         }
+            
         else {
             secret_key_attack >> INJECT_ERROR;
             secret_key_attack.close();
         }
 
-        std::string filepath2 = "~/ckksBitFlip/openfheBitFlip/inyectionIsActive.txt";
+        std::string filepath2 = std::string(home) +  "/ckksBitFlip/openfheBitFlip/inyectionIsActive.txt";
         std::ofstream file2(filepath2);
+        
+        if (!file2.is_open()) {
+            std::cerr << "Error: Cannot open file: " << filepath2 << std::endl;
+            return 1;
+        }
+        
         for (size_t i = 0; i < slots; ++i) {
             double real = scale * (curValues[i].real() + conjugate[i].real());
             // real += powP * dgg.GenerateIntegerKarney(0.0, stddev);
