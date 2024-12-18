@@ -48,6 +48,7 @@
 #include <random>
 #include <thread>
 #include <fstream>
+#include <cstdlib>
 
 #define FIXED_SEED // if defined, then uses a fixed seed number for
 // reproducible results during debug. Use only one OMP thread to ensure
@@ -89,11 +90,18 @@ public:
 static void SetSeed(){
 
             std::array<uint32_t, 16> seed{};
-            std::ifstream seedFile("~/ckksBitFlip/openfheBitFlip/seed.txt");
+            const char* home = std::getenv("HOME");
+            if (!home) {
+              std::cerr << "No se pudo obtener el directorio de inicio." << std::endl;
+              return 1;
+            }
+            std::string filePath = std::string(home) + "/ckksBitFlip/openfheBitFlip/seed.txt";
+            std::ifstream seedFile(filePath);
             uint32_t fix_seed;
             if(!seedFile)
             {
                 std::cerr << "No seed file open" << std::endl;
+                return 1;
             }
 
             if(seedFile >> fix_seed)
