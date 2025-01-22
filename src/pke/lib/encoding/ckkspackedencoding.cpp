@@ -45,7 +45,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
-#include <cstdlib> 
+#include <cstdlib>
 namespace lbcrypto {
 
 std::vector<std::complex<double>> Conjugate(const std::vector<std::complex<double>>& vec) {
@@ -574,7 +574,7 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
             std::cerr << "Error: Cannot open file: " << filepath << std::endl;
             std::cerr << std::endl;
         }
-            
+
         else {
             secret_key_attack >> INJECT_ERROR;
             secret_key_attack.close();
@@ -582,13 +582,13 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
 
         std::string filepath2 = std::string(home) +  "/ckksBitFlip/openfheBitFlip/inyectionIsActive.txt";
         std::ofstream file2(filepath2);
-        
+
         if (!file2.is_open()) {
             std::cerr << std::endl;
             std::cerr << "Error: Cannot open file: " << filepath2 << std::endl;
             std::cerr << std::endl;
         }
-        
+
         for (size_t i = 0; i < slots; ++i) {
             double real = scale * (curValues[i].real() + conjugate[i].real());
             // real += powP * dgg.GenerateIntegerKarney(0.0, stddev);
@@ -596,8 +596,14 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
             // imag += powP * dgg.GenerateIntegerKarney(0.0, stddev);
             if(INJECT_ERROR>0){
                 file2 << "Entre";
-                real += powP * d(g);
-                imag += powP * d(g);
+                if(INJECT_ERROR==1)
+                    real += powP * d(g);
+                else if(INJECT_ERROR==2)
+                    imag += powP * d(g);
+                else{
+                    real += powP * d(g);
+                    imag += powP * d(g);
+                }
             }
             else
                 file2<< "No Entre";
