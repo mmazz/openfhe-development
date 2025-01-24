@@ -446,16 +446,17 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
 
         for (size_t i = 0, idx = 0; i < slots; ++i, idx += gap) {
             std::complex<double> cur;
-
+            auto elem1 = GetElement<NativePoly>()[idx];
+            auto elem2 = GetElement<NativePoly>()[idx + Nh];
             if (GetElement<NativePoly>()[idx] > qHalf)
-                cur.real(-((q - GetElement<NativePoly>()[idx])).ConvertToDouble());
+                cur.real(-((q - elem1)).ConvertToDouble());
             else
-                cur.real((GetElement<NativePoly>()[idx]).ConvertToDouble());
+                cur.real((elem1).ConvertToDouble());
 
             if (GetElement<NativePoly>()[idx + Nh] > qHalf)
-                cur.imag(-((q - GetElement<NativePoly>()[idx + Nh])).ConvertToDouble());
+                cur.imag(-((q - elem2).ConvertToDouble()));
             else
-                cur.imag((GetElement<NativePoly>()[idx + Nh]).ConvertToDouble());
+                cur.imag((elem2).ConvertToDouble());
 
             curValues[i] = cur;
         }
@@ -478,16 +479,17 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
 
         for (size_t i = 0, idx = 0; i < slots; ++i, idx += gap) {
             std::complex<double> cur;
-
+            auto elem1 = GetElement<Poly>()[idx];
+            auto elem2 = GetElement<Poly>()[idx + Nh];
             if (GetElement<Poly>()[idx] > qHalf)
-                cur.real(-((q - GetElement<Poly>()[idx])).ConvertToDouble() * scalingFactorPre);
+                cur.real(-((q - elem1)).ConvertToDouble() * scalingFactorPre);
             else
-                cur.real((GetElement<Poly>()[idx]).ConvertToDouble() * scalingFactorPre);
+                cur.real((elem1).ConvertToDouble() * scalingFactorPre);
 
             if (GetElement<Poly>()[idx + Nh] > qHalf)
-                cur.imag(-((q - GetElement<Poly>()[idx + Nh])).ConvertToDouble() * scalingFactorPre);
+                cur.imag(-((q - elem2)).ConvertToDouble() * scalingFactorPre);
             else
-                cur.imag((GetElement<Poly>()[idx + Nh]).ConvertToDouble() * scalingFactorPre);
+                cur.imag((elem2).ConvertToDouble() * scalingFactorPre);
 
             curValues[i] = cur;
         }
@@ -616,7 +618,8 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         // Z[X + 1/X]/(X^n + 1). This would change the complexity from n*logn to
         // roughly (n/2)*log(n/2). This change should be done together with the one
         // above.
-        DiscreteFourierTransform::FFTSpecial(realValues, GetElementRingDimension() * 2);
+        auto ringDim = GetElementRingDimension();
+        DiscreteFourierTransform::FFTSpecial(realValues, ringDim * 2);
 
         // clears all imaginary values for security reasons
         for (size_t i = 0; i < realValues.size(); ++i)
