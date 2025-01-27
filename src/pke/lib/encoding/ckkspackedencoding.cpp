@@ -443,7 +443,7 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
 
         const NativeInteger& q = this->GetElementModulus().ConvertToInt();
         NativeInteger qHalf    = q >> 1;
-
+        auto poly =  GetElement<NativePoly>();
         for (size_t i = 0, idx = 0; i < slots; ++i, idx += gap) {
             std::complex<double> cur;
             auto elem1 = GetElement<NativePoly>()[idx];
@@ -590,7 +590,7 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
             std::cerr << "Error: Cannot open file: " << filepath2 << std::endl;
             std::cerr << std::endl;
         }
-
+        auto e = powP * d(g);
         for (size_t i = 0; i < slots; ++i) {
             double real = scale * (curValues[i].real() + conjugate[i].real());
             // real += powP * dgg.GenerateIntegerKarney(0.0, stddev);
@@ -603,8 +603,10 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
                 else if(INJECT_ERROR==2)
                     imag += powP * d(g);
                 else{
-                    real += powP * d(g);
-                    imag += powP * d(g);
+                    e = powP * d(g);
+                    real += e;
+                    e = powP * d(g);
+                    imag += e;
                 }
             }
             else
