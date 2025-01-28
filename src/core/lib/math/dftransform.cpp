@@ -214,18 +214,18 @@ void DiscreteFourierTransform::FFTSpecialInv(std::vector<std::complex<double>>& 
         errMsg += std::to_string(cyclOrder);
         OPENFHE_THROW(errMsg);
     }
-
+    const PrecomputedValues& prepValues = it->second;   
     const uint32_t valsSize = vals.size();
     for (size_t len = valsSize; len >= 1; len >>= 1) {
         for (size_t i = 0; i < valsSize; i += len) {
             size_t lenh = len >> 1;
             size_t lenq = len << 2;
-            size_t gap  = it->second.m_M / lenq;
+            size_t gap  = prepValues.m_M / lenq;
             for (size_t j = 0; j < lenh; ++j) {
-                size_t idx             = (lenq - (it->second.m_rotGroup[j] % lenq)) * gap;
+                size_t idx             = (lenq - (prepValues.m_rotGroup[j] % lenq)) * gap;
                 std::complex<double> u = vals[i + j] + vals[i + j + lenh];
                 std::complex<double> v = vals[i + j] - vals[i + j + lenh];
-                v *= it->second.m_ksiPows[idx];
+                v *= prepValues.m_ksiPows[idx];
                 vals[i + j]        = u;
                 vals[i + j + lenh] = v;
             }

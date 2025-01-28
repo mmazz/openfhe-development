@@ -10,7 +10,7 @@ int main() {
     uint32_t multDepth = 0;
     uint32_t scaleModSize = 7;
     uint32_t firstModSize = 9;
-    uint32_t ringDim = 4;
+    uint32_t ringDim = 8;
     uint32_t batchSize = ringDim >> 2;
 
     ScalingTechnique rescaleTech = FIXEDMANUAL;
@@ -31,7 +31,7 @@ int main() {
 
     auto keys = cc->KeyGen();
 
-    std::vector<double> x1 = {0.25};
+    std::vector<double> x1 = {0.25, 1.1};
 
     Plaintext ptxt1 = cc->MakeCKKSPackedPlaintext(x1);
 
