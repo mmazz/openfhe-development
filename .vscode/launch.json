@@ -5,7 +5,7 @@
    		 "name": "Mati-Debugger",
    		 "type": "cppdbg",
    		 "request": "launch",
-   		 "program": "${workspaceFolder}/build/bin/examples/pke/smallestGap",
+   		 "program": "${workspaceFolder}/build/bin/examples/pke/smallest",
    		 "args": [],
    		 "stopAtEntry": false,
    		 "cwd": "${fileDirname}",

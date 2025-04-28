@@ -539,9 +539,24 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         //    stddev = 0.125 * std::sqrt(GetElementRingDimension());
         //  }
         // }
-
+        const char* home = std::getenv("HOME");
+        int SDC = 0;
+        std::string fileSDC = std::string(home) + "/ckksBitFlip/openfheBitFlip/SKA_crash.txt";
+        std::ofstream SKA_Crash(fileSDC, std::ios_base::app);
         //   If less than 5 bits of precision is observed
-        //if (logstd > p - 5.0)
+        if (logstd > p - 5.0)
+            SDC = 1;
+
+        if (!SKA_Crash.is_open()) {
+                std::cerr << std::endl;
+                std::cerr << "Error: Cannot open file: " << fileSDC<< std::endl;
+                std::cerr << std::endl;
+        }
+
+        else {
+            SKA_Crash << SDC << ", ";
+            SKA_Crash.close();
+        }
         //    OPENFHE_THROW(
         //        "The decryption failed because the approximation error is "
         //        "too high. Check the parameters. ");
@@ -565,7 +580,6 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         // We would add sampling only for even indices of i.
         // This change should be done together with the one below.
         int INJECT_ERROR = 1;
-        const char* home = std::getenv("HOME");
         if (!home) {
             std::cerr << "No se pudo obtener el directorio de inicio." << std::endl;
         }
@@ -592,8 +606,16 @@ bool CKKSPackedEncoding::Decode(size_t noiseScaleDeg, double scalingFactor, Scal
         }
         auto e = powP * d(g);
         for (size_t i = 0; i < slots; ++i) {
+            auto tempReal = curValues[i].real();
+            auto tempImag = conjugate[i].real();
+            auto tempSum = tempReal+tempImag;
+            double tempMul = scale * tempSum;
             double real = scale * (curValues[i].real() + conjugate[i].real());
             // real += powP * dgg.GenerateIntegerKarney(0.0, stddev);
+            tempReal = curValues[i].imag();
+            tempImag = conjugate[i].imag();
+            tempSum = tempReal+tempImag;
+            tempMul = scale * tempSum;
             double imag = scale * (curValues[i].imag() + conjugate[i].imag());
             // imag += powP * dgg.GenerateIntegerKarney(0.0, stddev);
             if(INJECT_ERROR>0){
