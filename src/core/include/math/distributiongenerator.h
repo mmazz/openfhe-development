@@ -41,7 +41,7 @@
 
 #include "utils/parallel.h"
 #include "utils/prng/blake2engine.h"
-
+#include <unistd.h>
 #include <chrono>
 #include <memory>
 // #include <mutex>
@@ -94,7 +94,9 @@ static void SetSeed(){
             if (!home) {
               std::cerr << "No se pudo obtener el directorio de inicio." << std::endl;
             }
-            std::string filePath = std::string(home) + "/ckksBitFlip/openfheBitFlip/seed.txt";
+            pid_t pid = getpid();
+            std::string pid_str = std::to_string(pid);
+            std::string filePath = std::string(home) + "/ckksBitFlip/openfheBitFlip/seed"+pid_str+".txt";
             std::ifstream seedFile(filePath);
             uint32_t fix_seed;
             if(!seedFile)
