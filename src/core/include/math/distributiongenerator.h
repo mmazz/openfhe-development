@@ -96,7 +96,7 @@ static void SetSeed(){
             }
             pid_t pid = getpid();
             std::string pid_str = std::to_string(pid);
-            std::string filePath = std::string(home) + "/ckksBitFlip/openfheBitFlip/seed"+pid_str+".txt";
+            std::string filePath = std::string(home) + "/ckksBitFlip/openfheBitFlip/campaigns/seeds/seed_"+pid_str+".txt";
             std::ifstream seedFile(filePath);
             uint32_t fix_seed;
             if(!seedFile)
